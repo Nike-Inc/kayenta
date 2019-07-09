@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface MetricsService {
+  String NOT_IMPLEMENTED_PREFIX = "buildQuery() is not implemented for ";
+
   String getType();
 
   boolean servicesAccount(String accountName);
@@ -34,7 +36,11 @@ public interface MetricsService {
                             CanaryConfig canaryConfig,
                             CanaryMetricConfig canaryMetricConfig,
                             CanaryScope canaryScope) throws IOException {
-    return "buildQuery() is not implemented for " + this.getClass().getSimpleName() + ".";
+    return NOT_IMPLEMENTED_PREFIX + this.getClass().getSimpleName() + ".";
+  }
+
+  default CanaryScope convertCanaryScope(CanaryScope canaryScope) {
+    throw new NotImplementedException("convertCanaryScope() not implemented for" + this.getClass().getSimpleName() + ".");
   }
 
   List<MetricSet> queryMetrics(String accountName,
