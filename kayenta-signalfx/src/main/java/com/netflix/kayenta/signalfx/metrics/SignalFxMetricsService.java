@@ -145,7 +145,12 @@ public class SignalFxMetricsService implements MetricsService {
           signalFlowService.executeSignalFlowProgram(
               accessToken, startEpochMilli, endEpochMilli, stepMilli, maxDelay, immediate, program);
     } catch (RetrofitError e) {
-      ErrorResponse errorResponse = (ErrorResponse) e.getBodyAs(ErrorResponse.class);
+      ErrorResponse errorResponse;
+      try {
+        errorResponse = (ErrorResponse) e.getBodyAs(ErrorResponse.class);
+      } catch (Exception e1) {
+        throw new RuntimeException("Unable to parse error response: " + e.getBody().toString());
+      }
       throw new SignalFxRequestError(
           errorResponse, program, startEpochMilli, endEpochMilli, stepMilli, metricsAccountName);
     }
